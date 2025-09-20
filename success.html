@@ -1,0 +1,36 @@
+<!-- Payment Success Screen -->
+<div id="payment-success-screen" class="screen-container hidden">
+  <div class="background-overlay"></div>
+  <div class="z-10 w-full max-w-md mx-auto flex flex-col h-full justify-center items-center">
+    <div class="flex flex-col items-center mb-8">
+      <svg class="w-20 h-20 text-green-400 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h1 class="text-3xl font-bold text-green-400 mb-2">Payment Successful</h1>
+      <p class="text-lg text-indigo-200">Your payment has been completed.</p>
+    </div>
+    <div class="w-full bg-white/10 rounded-xl p-6 mb-6 shadow-lg">
+      <div class="flex justify-between mb-2">
+        <span class="font-semibold">To</span>
+        <span id="success-recipient">Raju</span>
+      </div>
+      <div class="flex justify-between mb-2">
+        <span class="font-semibold">Amount</span>
+        <span id="success-amount">₹500</span>
+      </div>
+      <div class="flex justify-between mb-2">
+        <span class="font-semibold">UPI Transaction ID</span>
+        <span id="success-txn-id">1234567890ABC</span>
+      </div>
+      <div class="flex justify-between mb-2">
+        <span class="font-semibold">Date & Time</span>
+        <span id="success-date">20 Sep 2025, 12:34 PM</span>
+      </div>
+      <div class="flex justify-between mb-2">
+        <span class="font-semibold">Bank Ref No.</span>
+        <span id="success-bank-ref">VAANI123456</span>
+      </div>
+    </div>
+    <button id="success-done-button" class="w-full bg-blue-600 text-white p-4 rounded-xl text-lg font-bold transition-all hover:bg-blue-700 active:scale-95">Done</button>
+  </div>
+</div>

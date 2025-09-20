@@ -1,0 +1,270 @@
+/* Base Styles */
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Screen Layout */
+.screen-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-image: linear-gradient(
+    to bottom right,
+    #3730a3,
+    #1e1b4b
+  ); /* indigo-800 to indigo-900 */
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.background-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.04%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.content-container {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+}
+
+.button-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 20rem; /* max-w-xs */
+  max-height: 15rem; /* max-h-60 */
+  overflow-y: auto;
+}
+
+.glass-button {
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem; /* rounded-xl */
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 600; /* font-semibold */
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+  width: 100%;
+}
+.glass-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.glass-button:active {
+  transform: scale(0.95);
+}
+
+.setup-choice-button {
+  flex: 1;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+  text-align: center;
+}
+.setup-choice-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.setup-choice-button:active {
+  transform: scale(0.95);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-400 {
+  animation-delay: 400ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+.delay-600 {
+  animation-delay: 600ms;
+}
+.delay-700 {
+  animation-delay: 700ms;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+.listening-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Utilities */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.bank-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.hidden {
+  display: none !important;
+}
+.gpay-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+#balance-section {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border-radius: 1rem;
+    background: rgba(255,255,255,0.85);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+}
+#balance {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #16a34a;
+}
+  gap: 0.5rem;
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.gpay-option:hover {
+  transform: scale(1.05);
+}
+.gpay-icon-bg {
+  width: 56px; /* w-14 */
+  height: 56px; /* h-14 */
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.gpay-icon-bg svg {
+  width: 28px; /* w-7 */
+  height: 28px; /* h-7 */
+  color: white;
+}
+.contact-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* gap-4 */
+  padding: 0.75rem; /* p-3 */
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem; /* rounded-xl */
+  transition: all 0.2s;
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.contact-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.contact-list-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+/* Styles for Amount Input */
+#amount-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+/* Remove number input arrows */
+#amount-input::-webkit-outer-spin-button,
+#amount-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#amount-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Styles for PIN Screen */
+.pin-dot {
+  width: 1.5rem; /* w-6 */
+  height: 1.5rem; /* h-6 */
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  transition: all 0.2s;
+}
+.pin-dot.filled {
+  background-color: white;
+}
+
+.numpad-button {
+  padding: 1.25rem; /* p-5 */
+  text-align: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.numpad-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.numpad-button:active {
+  transform: scale(0.95);
+}

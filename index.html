@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaani Pay</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-100 h-screen overflow-hidden">
+
+
+    <!-- Screen 1: Language Selection -->
+    <div id="language-screen" class="screen-container">
+        <div class="background-overlay"></div>
+        <div class="content-container">
+            <div class="logo-container animate-fade-in-up delay-100">
+                <svg class="w-20 h-20 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10V14M12 7V17M17 10V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path
+                        d="M4 6C2.75 7.561 2 9.69 2 12C2 17.523 6.477 22 12 22C17.523 22 22 17.523 22 12C22 9.69 21.25 7.561 20 6"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold mb-2 animate-fade-in-up delay-200">Welcome to Vaani Pay</h1>
+            <p class="text-lg text-indigo-200 mb-10 animate-fade-in-up delay-300">Please select your language</p>
+            <div class="button-list-container animate-fade-in-up delay-400">
+                <button onclick="selectLanguage('en-IN')" class="glass-button">English</button>
+                <button onclick="selectLanguage('hi-IN')" class="glass-button">हिन्दी (Hindi)</button>
+                <button onclick="selectLanguage('bn-IN')" class="glass-button">বাংলা (Bengali)</button>
+                <button onclick="selectLanguage('mr-IN')" class="glass-button">मराठी (Marathi)</button>
+                <button onclick="selectLanguage('te-IN')" class="glass-button">తెలుగు (Telugu)</button>
+                <button onclick="selectLanguage('ta-IN')" class="glass-button">தமிழ் (Tamil)</button>
+                <button onclick="selectLanguage('gu-IN')" class="glass-button">ગુજરાતી (Gujarati)</button>
+                <button onclick="selectLanguage('kn-IN')" class="glass-button">ಕನ್ನಡ (Kannada)</button>
+                <button onclick="selectLanguage('ml-IN')" class="glass-button">മലയാളം (Malayalam)</button>
+                <button onclick="selectLanguage('pa-IN')" class="glass-button">ਪੰਜਾਬੀ (Punjabi)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 2: Setup Choice -->
+    <div id="setup-choice-screen" class="screen-container hidden">
+        <div class="background-overlay"></div>
+        <div class="content-container">
+            <div class="logo-container animate-fade-in-up delay-100">
+                <svg class="w-20 h-20 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM18 13.5a3.375 3.375 0 00-3.375-3.375L12.75 9.75l-1.875.531a3.375 3.375 0 00-2.456 2.456L7.5 15l1.036.259a3.375 3.375 0 002.455 2.456L12 18.75l.813-2.846a3.375 3.375 0 002.456-2.456L18 13.5z" />
+                </svg>
+            </div>
+            <h1 data-translate-key="setup_choice_title" class="text-3xl font-bold mb-2 animate-fade-in-up delay-200">How
+                would you like to set up?</h1>
+            <p data-translate-key="setup_choice_subtitle"
+                class="text-lg text-indigo-200 max-w-sm mx-auto mb-10 animate-fade-in-up delay-300">Choose your
+                preferred method. You can click or speak your choice.</p>
+            <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+                <button id="voice-setup-button" class="setup-choice-button animate-fade-in-up delay-400">
+                    <span data-translate-key="setup_voice_button" class="text-lg font-semibold block">Voice Setup</span>
+                    <span data-translate-key="setup_voice_description" class="text-sm text-indigo-200 block">Use your
+                        voice for guidance</span>
+                </button>
+                <button id="normal-setup-button" class="setup-choice-button animate-fade-in-up delay-500">
+                    <span data-translate-key="setup_normal_button" class="text-lg font-semibold block">Normal
+                        Setup</span>
+                    <span data-translate-key="setup_normal_description" class="text-sm text-indigo-200 block">Manual
+                        step-by-step process</span>
+                </button>
+            </div>
+            <p id="setup-status" class="mt-4 text-lg text-indigo-200 h-6"></p>
+        </div>
+    </div>
+
+    <!-- Screen 3A: Voice Bank Setup -->
+    <div id="voice-bank-setup-screen" class="screen-container hidden">
+        <div class="background-overlay"></div>
+        <div id="voice-bank-content" class="content-container">
+            <!-- Content changes dynamically via JS -->
+        </div>
+    </div>
+
+    <!-- Screen 3B: Normal Bank Setup -->
+    <div id="normal-bank-setup-screen" class="screen-container p-4 sm:p-8 hidden">
+        <div class="background-overlay"></div>
+        <div class="z-10 w-full max-w-md mx-auto flex flex-col h-full">
+            <h1 data-translate-key="normal_setup_title" class="text-3xl font-bold text-center mt-8 mb-4">Select your
+                Bank</h1>
+            <div class="bg-white/10 rounded-lg p-2 mb-4">
+                <input id="bank-search-input" data-translate-key="search_placeholder" type="text"
+                    placeholder="Search for your bank..."
+                    class="w-full bg-transparent text-white placeholder-indigo-200 focus:outline-none p-2">
+            </div>
+            <div id="bank-list-container" class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+                <div class="flex flex-col gap-2">
+                    <!-- Banks will be dynamically inserted here by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 4: Voice Command Screen -->
+    <div id="voice-command-screen" class="screen-container justify-between hidden">
+        <div class="background-overlay"></div>
+        <div class="w-full max-w-md mx-auto flex flex-col justify-center items-center h-full z-10">
+            <div class="w-full h-48 flex items-center justify-center text-center p-4">
+                <p id="status-text" class="text-2xl text-indigo-200 font-semibold" data-translate-key="status_ready">Tap
+                    the microphone to speak</p>
+            </div>
+            <div class="relative my-8">
+                <button id="mic-button"
+                    class="w-40 h-40 bg-blue-600 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out shadow-lg hover:bg-blue-700 active:scale-90">
+                    <svg class="w-20 h-20 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 016 0v8.25a3 3 0 01-3 3z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="text-center">
+                <p class="text-indigo-300" data-translate-key="example_command">Example: "Send 50 rupees to Raju"</p>
+                <button id="show-contacts-button"
+                    class="mt-4 px-6 py-3 bg-white/10 border border-white/20 rounded-xl font-semibold hover:bg-white/20 transition-all">
+                    <span data-translate-key="pay_contact_button">Pay a Contact</span>
+                </button>
+            </div>
+        </div>
+        #contact-selection-screen
+    </div>
+    <div id="contact-selection-screen" class="screen-container p-4 sm:p-8 hidden">
+        <div class="background-overlay"></div>
+        <div class="z-10 w-full max-w-md mx-auto flex flex-col h-full">
+
+            <div class="flex items-center mb-6">
+                <button id="back-to-main-button" class="p-2 rounded-full hover:bg-white/10 transition-all">
+                    <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+                <h1 class="text-2xl font-bold text-center flex-1" data-translate-key="pay_contact_title">Send Money</h1>
+            </div>
+
+            <div class="grid grid-cols-4 gap-4 text-center mb-6">
+                <a href="#" class="gpay-option">
+                    <div class="gpay-icon-bg">
+                        <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 4.875c0-1.036.84-1.875 1.875-1.875h4.5c1.036 0 1.875.84 1.875 1.875v4.5c0 1.036-.84 1.875-1.875 1.875h-4.5A1.875 1.875 0 013.75 9.375v-4.5zM3.75 14.625c0-1.036.84-1.875 1.875-1.875h4.5c1.036 0 1.875.84 1.875 1.875v4.5c0 1.036-.84 1.875-1.875 1.875h-4.5A1.875 1.875 0 013.75 19.125v-4.5zM13.5 4.875c0-1.036.84-1.875 1.875-1.875h4.5c1.036 0 1.875.84 1.875 1.875v4.5c0 1.036-.84 1.875-1.875 1.875h-4.5A1.875 1.875 0 0113.5 9.375v-4.5zM13.5 14.625c0-1.036.84-1.875 1.875-1.875h4.5c1.036 0 1.875.84 1.875 1.875v4.5c0 1.036-.84 1.875-1.875 1.875h-4.5A1.875 1.875 0 0113.5 19.125v-4.5z" />
+                        </svg>
+                    </div>
+                    <span data-translate-key="pay_scan_qr">Scan QR</span>
+                </a>
+                <a href="#" class="gpay-option">
+                    <div class="gpay-icon-bg">
+                        <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                        </svg>
+                    </div>
+                    <span data-translate-key="pay_phone_num">Pay Phone No.</span>
+                </a>
+                <a href="#" class="gpay-option">
+                    <div class="gpay-icon-bg">
+                        <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 21V3m0 18H5.25a2.25 2.25 0 01-2.25-2.25V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25v13.5a2.25 2.25 0 01-2.25 2.25H12z" />
+                        </svg>
+                    </div>
+                    <span data-translate-key="pay_bank">Pay Bank</span>
+                </a>
+                <a href="#" class="gpay-option">
+                    <div class="gpay-icon-bg">
+                        <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
+                        </svg>
+                    </div>
+                    <span data-translate-key="pay_upi_id">Pay UPI ID</span>
+                </a>
+                <button id="check-balance-button" class="gpay-option">
+                    <div class="gpay-icon-bg">
+                        <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.75v14.5m7.25-7.25H4.75" />
+                        </svg>
+                    </div>
+                    <span class="mt-2">Check Balance</span>
+                </button>
+            </div>
+
+            <h2 class="text-lg font-semibold text-indigo-200 mb-2" data-translate-key="pay_recents">Recents</h2>
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+                <div class="flex flex-col gap-2">
+                    <button class="contact-list-item" onclick="goToAmountScreen('Raju')">
+    <img src="https://placehold.co/40x40/EEE/313131?text=R" class="rounded-full" />
+    <span>Raju</span>
+</button>
+<button class="contact-list-item" onclick="goToAmountScreen('Mom')">
+    <img src="https://placehold.co/40x40/313131/EEE?text=M" class="rounded-full" />
+    <span>Mom</span>
+</button>
+                    <button id="open-phone-contacts" class="contact-list-item">
+                        <div class="gpay-icon-bg !w-10 !h-10">
+                            <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h6m-6 2.25h6M12 9.75l.02.02.014.014L12 9.75zm.014.014L12 9.75l.014.014zm.014.014L12 9.75l.014.014zm0 0L12 9.75l.014.014z" />
+                            </svg>
+                        </div>
+                        <span>Select from Phone Contacts</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="amount-screen" class="screen-container p-4 sm:p-8 hidden">
+        <div class="background-overlay"></div>
+        <div class="z-10 w-full max-w-md mx-auto flex flex-col h-full">
+
+            <div class="flex items-center mb-6">
+                <button id="back-to-contacts-button" class="p-2 rounded-full hover:bg-white/10 transition-all">
+                    <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+                <h1 class="text-2xl font-bold text-center flex-1" data-translate-key="pay_contact_title">Send Money</h1>
+                <button id="check-balance-button" class="ml-4 px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-all">Check Balance</button>
+            </div>
+
+            <div class="flex items-center gap-4 p-4 bg-white/10 rounded-xl mb-6">
+                <img src="https://placehold.co/40x40/EEE/313131?text=R" id="amount-recipient-img"
+                    class="rounded-full w-12 h-12" />
+                <div>
+                    <span class="font-semibold text-lg" id="amount-recipient-name">Raju</span>
+                    <span class="text-sm text-indigo-200 block" id="amount-recipient-detail">Paying...</span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center my-4">
+                <span class="text-6xl font-bold text-white">₹</span>
+                <input id="amount-input" type="number"
+                    class="text-6xl font-bold bg-transparent text-white w-full text-center focus:outline-none"
+                    placeholder="0">
+            </div>
+
+            <div class="flex-1"></div> <button id="pay-button"
+                class="w-full bg-blue-600 text-white p-4 rounded-xl text-lg font-bold transition-all hover:bg-blue-700 active:scale-95">
+                <span data-translate-key="pay_button">Pay</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="pin-screen" class="screen-container p-4 sm:p-8 hidden">
+        <div class="background-overlay"></div>
+        <div class="z-10 w-full max-w-sm mx-auto flex flex-col h-full">
+            <h1 class="text-2xl font-bold text-center text-white mt-12" data-translate-key="enter_pin">Enter UPI PIN
+            </h1>
+
+            <div id="pin-dots" class="flex justify-center gap-4 my-8">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+            </div>
+
+            <div class="flex-1"></div>
+            <div id="numpad" class.="grid grid-cols-3 gap-4 text-white text-2xl font-bold">
+            </div>
+        </div>
+    </div>
+    <!-- Custom Dialog/Modal -->
+    <div id="dialog-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div id="dialog-box"
+            class="bg-white/90 text-gray-800 rounded-2xl shadow-xl p-6 w-11/12 max-w-sm animate-fade-in-up">
+            <!-- Dialog content will be inserted here -->
+        </div>
+    </div>
+
+    <!-- JavaScript File -->
+    <script src="script.js"></script>
+</body>
+        <!-- Payment Success Screen (hidden by default) -->
+        <div id="payment-success-screen" class="screen-container hidden">
+            <div class="background-overlay"></div>
+            <div class="z-10 w-full max-w-md mx-auto flex flex-col h-full justify-center items-center">
+                <div class="flex flex-col items-center mb-8">
+                    <svg class="w-20 h-20 text-green-400 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h1 class="text-3xl font-bold text-green-400 mb-2">Payment Successful</h1>
+                    <p class="text-lg text-indigo-200">Your payment has been completed.</p>
+                </div>
+                <div class="w-full bg-white/10 rounded-xl p-6 mb-6 shadow-lg">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">To</span>
+                        <span id="success-recipient">Raju</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Amount</span>
+                        <span id="success-amount">₹500</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">UPI Transaction ID</span>
+                        <span id="success-txn-id">1234567890ABC</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Date & Time</span>
+                        <span id="success-date">20 Sep 2025, 12:34 PM</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Bank Ref No.</span>
+                        <span id="success-bank-ref">VAANI123456</span>
+                    </div>
+                </div>
+                <button id="success-done-button" class="w-full bg-blue-600 text-white p-4 rounded-xl text-lg font-bold transition-all hover:bg-blue-700 active:scale-95">Done</button>
+            </div>
+        </div>
+
+    <!-- QR Scanner Module -->
+    <script src="qrScanner.js"></script>
+</html>
