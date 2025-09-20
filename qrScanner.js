@@ -17,41 +17,51 @@ function loadHtml5QrcodeScript(callback) {
 // Show QR scanner UI and start scanning
 function startQrScanner(onScanSuccess, onScanError) {
     loadHtml5QrcodeScript(() => {
-        const scannerDivId = 'qr-scanner';
-        let scannerDiv = document.getElementById(scannerDivId);
-        if (!scannerDiv) {
-            scannerDiv = document.createElement('div');
-            scannerDiv.id = scannerDivId;
-            scannerDiv.style.position = 'fixed';
-            scannerDiv.style.top = '0';
-            scannerDiv.style.left = '0';
-            scannerDiv.style.width = '100vw';
-            scannerDiv.style.height = '100vh';
-            scannerDiv.style.background = 'rgba(0,0,0,0.8)';
-            scannerDiv.style.zIndex = '9999';
-            document.body.appendChild(scannerDiv);
-        }
-        scannerDiv.innerHTML = '<div id="qr-reader" style="width:300px;margin:100px auto;"></div><button id="close-qr" style="display:block;margin:20px auto;">Close</button>';
-        document.getElementById('close-qr').onclick = () => {
-            html5QrcodeScanner.clear();
-            scannerDiv.remove();
-        };
-        const html5QrcodeScanner = new Html5Qrcode('qr-reader');
-        html5QrcodeScanner.start(
-            { facingMode: 'environment' },
-            {
-                fps: 10,
-                qrbox: 250
-            },
-            (decodedText, decodedResult) => {
-                onScanSuccess(decodedText);
-                html5QrcodeScanner.clear();
-                scannerDiv.remove();
-            },
-            (errorMessage) => {
-                if (onScanError) onScanError(errorMessage);
+        // Wait for Html5Qrcode to be defined
+        function waitForHtml5Qrcode(retries = 10) {
+            if (window.Html5Qrcode) {
+                const scannerDivId = 'qr-scanner';
+                let scannerDiv = document.getElementById(scannerDivId);
+                if (!scannerDiv) {
+                    scannerDiv = document.createElement('div');
+                    scannerDiv.id = scannerDivId;
+                    scannerDiv.style.position = 'fixed';
+                    scannerDiv.style.top = '0';
+                    scannerDiv.style.left = '0';
+                    scannerDiv.style.width = '100vw';
+                    scannerDiv.style.height = '100vh';
+                    scannerDiv.style.background = 'rgba(0,0,0,0.8)';
+                    scannerDiv.style.zIndex = '9999';
+                    document.body.appendChild(scannerDiv);
+                }
+                scannerDiv.innerHTML = '<div id="qr-reader" style="width:300px;margin:100px auto;"></div><button id="close-qr" style="display:block;margin:20px auto;">Close</button>';
+                document.getElementById('close-qr').onclick = () => {
+                    html5QrcodeScanner.clear();
+                    scannerDiv.remove();
+                };
+                const html5QrcodeScanner = new window.Html5Qrcode('qr-reader');
+                html5QrcodeScanner.start(
+                    { facingMode: 'environment' },
+                    {
+                        fps: 10,
+                        qrbox: 250
+                    },
+                    (decodedText, decodedResult) => {
+                        onScanSuccess(decodedText);
+                        html5QrcodeScanner.clear();
+                        scannerDiv.remove();
+                    },
+                    (errorMessage) => {
+                        if (onScanError) onScanError(errorMessage);
+                    }
+                );
+            } else if (retries > 0) {
+                setTimeout(() => waitForHtml5Qrcode(retries - 1), 100);
+            } else {
+                if (onScanError) onScanError('QR library failed to load.');
             }
-        );
+        }
+        waitForHtml5Qrcode();
     });
 }
 

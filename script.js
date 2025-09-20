@@ -971,7 +971,7 @@ async function handleMainCommand(transcript) {
   }
 
   // Check for QR scan command (multi-language)
-  const scanQrKeywords = ["scan qr", "qr code", "scan the qr", "qr pay", "scan to pay", "qr स्कैन", "क्यूआर स्कैन", "qr স্ক্যান", "qr स्कॅन", "qr స్కాన్", "qr ஸ்கேன்", "qr સ્કેન", "qr ಸ್ಕ್ಯಾನ್"];
+  const scanQrKeywords = ["scan qr", "qr code", "scan the qr", "qr pay", "scan to pay", "qr स्कैन", "क्यूआर स्कैन", "qr স্ক্যান", "qr স্কॅন", "qr స్కాన్", "qr ஸ்கேன்", "qr સ્કેન", "qr ಸ್ಕ್ಯಾನ್"];
   if (scanQrKeywords.some(keyword => normalizedTranscript.includes(keyword))) {
     statusText.textContent = "Opening QR scanner...";
     speak("Opening QR scanner. Please show the QR code to the camera.");
@@ -1053,13 +1053,111 @@ function showConfirmation(details) {
     .replace("{recipient}", details.recipient);
 
   dialogBox.innerHTML = `
-        <h3 class="text-xl font-bold mb-4">${title}</h3>
-        <p class="mb-6 text-lg">${body}</p>
-        <div class="flex justify-end gap-3">
-            <button onclick="closeDialog()" class="px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-200">${currentTranslations.dialog_cancel}</button>
-            <button onclick="confirmTransaction()" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">${currentTranslations.dialog_confirm}</button>
+        <h3 class="text-2xl font-bold mb-6">${title}</h3>
+        <p class="text-xl mb-8">${body}</p>
+        <div id="confirm-note-breakdown" class="flex flex-wrap gap-6 items-center justify-center mb-6"></div>
+        <div class="flex justify-end gap-4 mt-6">
+            <button onclick="closeDialog()" class="px-6 py-3 rounded-lg text-gray-600 hover:bg-gray-200 text-lg">${currentTranslations.dialog_cancel}</button>
+            <button onclick="confirmTransaction()" class="px-6 py-3 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-lg font-bold">${currentTranslations.dialog_confirm}</button>
         </div>
     `;
+  // Enlarge dialog box
+  dialogBox.style.maxWidth = '600px';
+  dialogBox.style.width = '95%';
+  dialogBox.style.minHeight = '420px';
+  // Inject note breakdown images
+  setTimeout(() => {
+    const noteBreakdownElem = document.getElementById('confirm-note-breakdown');
+    if (noteBreakdownElem && details.amount) {
+      const notes = [2000, 500, 200, 100, 50, 20, 10];
+      let remaining = details.amount;
+      noteBreakdownElem.innerHTML = '';
+      notes.forEach(note => {
+        const count = Math.floor(remaining / note);
+        if (count > 0) {
+          const img = document.createElement('img');
+          img.src = `notes/${note}.png`;
+          img.alt = `₹${note} note`;
+          img.style.width = '320px';
+          img.style.height = 'auto';
+          img.style.borderRadius = '20px';
+          img.style.boxShadow = '0 8px 32px rgba(0,0,0,0.25)';
+          img.style.background = '#fff';
+          img.style.padding = '14px';
+          img.style.border = '4px solid #4F46E5';
+          img.style.marginBottom = '12px';
+          const label = document.createElement('div');
+          label.textContent = `x${count}`;
+          label.style.textAlign = 'center';
+          label.style.fontWeight = 'bold';
+          label.style.color = '#222';
+          label.style.fontSize = '1.7rem';
+          label.style.marginTop = '14px';
+          const wrapper = document.createElement('div');
+          wrapper.style.display = 'flex';
+          wrapper.style.flexDirection = 'column';
+          wrapper.style.alignItems = 'center';
+          wrapper.style.margin = '0 24px';
+          wrapper.appendChild(img);
+          wrapper.appendChild(label);
+          noteBreakdownElem.appendChild(wrapper);
+          remaining -= note * count;
+        }
+      });
+      if (remaining > 0) {
+        const coinLabel = document.createElement('div');
+        coinLabel.textContent = `Coins/Other: ₹${remaining}`;
+        coinLabel.style.fontWeight = 'bold';
+        coinLabel.style.color = '#555';
+        coinLabel.style.fontSize = '1.2rem';
+        coinLabel.style.marginLeft = '20px';
+        noteBreakdownElem.appendChild(coinLabel);
+      }
+    }
+  }, 0);
+  // Inject note breakdown images
+  setTimeout(() => {
+    const noteBreakdownElem = document.getElementById('confirm-note-breakdown');
+    if (noteBreakdownElem && details.amount) {
+      const notes = [2000, 500, 200, 100, 50, 20, 10];
+      let remaining = details.amount;
+      noteBreakdownElem.innerHTML = '';
+      notes.forEach(note => {
+        const count = Math.floor(remaining / note);
+        if (count > 0) {
+          const img = document.createElement('img');
+          img.src = `notes/${note}.png`;
+          img.alt = `₹${note} note`;
+          img.style.width = '120px';
+          img.style.height = 'auto';
+          img.style.borderRadius = '8px';
+          img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+          const label = document.createElement('div');
+          label.textContent = `x${count}`;
+          label.style.textAlign = 'center';
+          label.style.fontWeight = 'bold';
+          label.style.color = '#333';
+          label.style.marginTop = '4px';
+          const wrapper = document.createElement('div');
+          wrapper.style.display = 'flex';
+          wrapper.style.flexDirection = 'column';
+          wrapper.style.alignItems = 'center';
+          wrapper.appendChild(img);
+          wrapper.appendChild(label);
+          noteBreakdownElem.appendChild(wrapper);
+          remaining -= note * count;
+        }
+      });
+      if (remaining > 0) {
+        const coinLabel = document.createElement('div');
+        coinLabel.textContent = `Coins/Other: ₹${remaining}`;
+        coinLabel.style.fontWeight = 'bold';
+        coinLabel.style.color = '#555';
+        coinLabel.style.marginLeft = '12px';
+        noteBreakdownElem.appendChild(coinLabel);
+      }
+    }
+  }, 0);
   dialogOverlay.classList.remove("hidden");
   dialogOverlay.classList.add("flex");
     // Speak confirmation and start listening for voice response
@@ -1076,7 +1174,9 @@ function showConfirmation(details) {
     recognition.onresult = function(event) {
       const transcript = event.results[0][0].transcript.trim().toLowerCase();
       console.log('[Voice Confirmation] Heard:', transcript);
-  const confirmWords = ["yes","confirm","y","ok","sure","haan","हाँ","confirm payment","pay","correct","right","sahi"]; 
+  const confirmWords = [
+    "yes","confirm","y","ok","sure","haan","हाँ","confirm payment","pay","correct","right","sahi","सही है","ठीक है"
+  ]; 
       const cancelWords = ["no","cancel","n","not","nahin","नहीं","don't pay","do not pay","cancel payment"];
       if (confirmWords.some(word => transcript.includes(word))) {
         console.log('[Voice Confirmation] Confirm detected, stopping mic and confirming payment.');
@@ -1192,6 +1292,50 @@ function showPaymentSuccessScreen(details) {
   document.getElementById('success-date').textContent = formatFakeDate();
   document.getElementById('success-bank-ref').textContent = generateFakeBankRef();
 
+  // Show note breakdown images
+  const noteBreakdownElem = document.getElementById('note-breakdown');
+  if (noteBreakdownElem && details.amount) {
+    // List of available notes in descending order
+    const notes = [2000, 500, 200, 100, 50, 20, 10];
+    let remaining = details.amount;
+    noteBreakdownElem.innerHTML = '';
+    notes.forEach(note => {
+      const count = Math.floor(remaining / note);
+      if (count > 0) {
+        const img = document.createElement('img');
+        img.src = `notes/${note}.png`;
+        img.alt = `₹${note} note`;
+        img.style.width = '80px';
+        img.style.height = 'auto';
+        img.style.borderRadius = '8px';
+        img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+        const label = document.createElement('div');
+        label.textContent = `x${count}`;
+        label.style.textAlign = 'center';
+        label.style.fontWeight = 'bold';
+        label.style.color = '#333';
+        label.style.marginTop = '4px';
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.appendChild(img);
+        wrapper.appendChild(label);
+        noteBreakdownElem.appendChild(wrapper);
+        remaining -= note * count;
+      }
+    });
+    if (remaining > 0) {
+      // Show coins or remainder
+      const coinLabel = document.createElement('div');
+      coinLabel.textContent = `Coins/Other: ₹${remaining}`;
+      coinLabel.style.fontWeight = 'bold';
+      coinLabel.style.color = '#555';
+      coinLabel.style.marginLeft = '12px';
+      noteBreakdownElem.appendChild(coinLabel);
+    }
+  }
+
   // Done button returns to main/contact selection
   document.getElementById('success-done-button').onclick = function() {
     successScreen.classList.add('hidden');
@@ -1295,5 +1439,3 @@ function handleNumpad(item) {
         showConfirmation(currentTransaction);
     }
 }
-
-// --- END OF NEW FUNCTIONS --... (NaN KB left)
