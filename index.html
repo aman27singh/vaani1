@@ -194,6 +194,21 @@
                     </div>
                     <span data-translate-key="pay_upi_id">Pay UPI ID</span>
                 </a>
+                                <a href="#" id="view-history-main" class="gpay-option">
+                                        <div class="gpay-icon-bg">
+                                                <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 17l4 4 4-4m-4-5v9" />
+                                                </svg>
+                                        </div>
+                                        <span>Transaction History</span>
+                                </a>
+                                <!-- Transaction History Modal -->
+                                                <div id="transaction-history-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 hidden">
+                                                    <div class="bg-white rounded-xl shadow-2xl p-4 sm:p-6 w-11/12 max-w-md relative overflow-y-auto max-h-[90vh]">
+                                                        <button id="close-history-modal" class="absolute top-2 right-2 text-gray-500 hover:text-indigo-600 text-2xl font-bold">&times;</button>
+                                                        <div id="transaction-history" class="w-full"></div>
+                                                    </div>
+                                                </div>
                 <button id="check-balance-button" class="gpay-option">
                     <div class="gpay-icon-bg">
                         <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -293,8 +308,14 @@
         </div>
     </div>
 
-    <!-- JavaScript File -->
-    <script src="script.js"></script>
+        <!-- JavaScript Files -->
+        <script src="script.js"></script>
+        <script src="transaction-history.js"></script>
+        <script>
+            if (typeof setupTransactionHistoryModal === 'function') {
+                setupTransactionHistoryModal();
+            }
+        </script>
 </body>
         <!-- Payment Success Screen (hidden by default) -->
         <div id="payment-success-screen" class="screen-container hidden">
@@ -330,6 +351,7 @@
                     </div>
                 </div>
                 <button id="success-done-button" class="w-full bg-blue-600 text-white p-4 rounded-xl text-lg font-bold transition-all hover:bg-blue-700 active:scale-95">Done</button>
+                <!-- Removed duplicate transaction history button and div from payment success screen -->
             </div>
         </div>
 

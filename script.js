@@ -98,6 +98,95 @@ if (SpeechRecognition) {
   alert("Sorry, your browser does not support voice commands.");
 }
 
+// --- AUDIO PASSBOOK VOICE COMMAND INTEGRATION ---
+function parseAudioPassbookCommand(transcript) {
+  // Example: "read my last 3 transactions", "audio passbook 5", "read last two transactions"
+  const numberWords = {
+    'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+    'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10
+  };
+  const lower = transcript.toLowerCase();
+  // Accept both singular/plural, digit/word numbers, and default to 2
+  const regex = /(read|audio passbook).*?(last\s*)?(\d+|one|two|three|four|five|six|seven|eight|nine|ten)?\s*transactions?/;
+  const match = lower.match(regex);
+  let n = 2; // default
+  if (match) {
+    if (match[3]) {
+      if (numberWords[match[3]]) {
+        n = numberWords[match[3]];
+      } else {
+        n = parseInt(match[3], 10);
+      }
+    }
+    if (!isNaN(n) && n > 0) {
+      window.readLastNTransactions(n);
+      return true;
+    }
+    // If command starts with 'read' and no number, default to 3 transactions
+    if (lower.trim().startsWith('read')) {
+      window.readLastNTransactions(3);
+      return true;
+    }
+  }
+  // Only speak error if the command looks like a passbook query
+  if (lower.includes('read') || lower.includes('passbook') || lower.includes('transaction')) {
+    window.speakText('Could not extract the number of transactions from your command. Please try again and speak clearly, for example: "Read last 2 transactions".');
+    return true;
+  }
+  return false;
+}
+
+
+// Actual integration: Patch your recognition.onresult handler
+if (recognition) {
+  recognition.onresult = async function(event) {
+    const transcript = event.results[0][0].transcript;
+    // 1. Audio passbook command
+    if (!parseAudioPassbookCommand(transcript)) {
+      // 2. Transaction command (your existing logic)
+      if (typeof handleMainCommand === 'function') {
+        await handleMainCommand(transcript);
+        return;
+      }
+    }
+
+    // 3. Otherwise, treat as general question and send to Gemini AI
+    showAssistantThinking(); // Optional: show UI feedback
+    try {
+      const answer = await queryGeminiAI(transcript);
+      speakText(answer);
+      showAssistantResponse(answer); // Optional: show answer in UI
+    } catch (err) {
+      speakText('Sorry, I could not get an answer.');
+    }
+  }
+
+  // Example Gemini API query function (replace with your actual API call)
+  async function queryGeminiAI(question) {
+    // Replace with your Gemini API endpoint and key
+    const endpoint = 'https://api.gemini.google.com/v1/answer';
+    const apiKey = 'YOUR_GEMINI_API_KEY';
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({ question })
+    });
+    const data = await response.json();
+    return data.answer || 'No answer found.';
+  }
+
+  // Optional UI feedback functions
+  function showAssistantThinking() {
+    // Show loading spinner or message
+  }
+  function showAssistantResponse(answer) {
+    // Display answer in chat bubble or modal
+  }
+}
+
 // --- TRANSLATIONS & DATA ---
 const translations = {
   "en-IN": {
@@ -971,7 +1060,7 @@ async function handleMainCommand(transcript) {
   }
 
   // Check for QR scan command (multi-language)
-  const scanQrKeywords = ["scan qr", "qr code", "scan the qr", "qr pay", "scan to pay", "qr स्कैन", "क्यूआर स्कैन", "qr স্ক্যান", "qr স্কॅন", "qr స్కాన్", "qr ஸ்கேன்", "qr સ્કેન", "qr ಸ್ಕ್ಯಾನ್"];
+  const scanQrKeywords = ["scan qr", "qr code", "scan the qr", "qr pay", "scan to pay", "qr स्कैन", "क्यूआर स्कैन", "qr स्कैन", "qr स्कॅन", "qr స్కాన్", "qr ஸ்கேன்", "qr સ્કેન", "qr ಸ್ಕ್ಯಾನ್"];
   if (scanQrKeywords.some(keyword => normalizedTranscript.includes(keyword))) {
     statusText.textContent = "Opening QR scanner...";
     speak("Opening QR scanner. Please show the QR code to the camera.");
@@ -1263,6 +1352,18 @@ function closeDialog() {
   }, 500);
 }
 
+function storeTransaction(details) {
+  if (!details || !details.amount || !details.recipient) return;
+  const tx = {
+    recipient: details.recipient,
+    amount: details.amount,
+    date: new Date().toISOString()
+  };
+  let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+  transactions.push(tx);
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
 function confirmTransaction() {
   // Simulate successful transaction
   closeDialog();
@@ -1275,6 +1376,7 @@ function confirmTransaction() {
     if (balanceElem) {
       balanceElem.textContent = formatRupees(balance);
     }
+    storeTransaction(details); // <-- Store transaction
   }
   showPaymentSuccessScreen(details);
 }
@@ -1439,3 +1541,13 @@ function handleNumpad(item) {
         showConfirmation(currentTransaction);
     }
 }
+
+// Transaction history button listener
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Transaction History Modal logic (modular)
+  if (typeof setupTransactionHistoryModal === 'function') {
+    setupTransactionHistoryModal();
+  }
+});
